@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "es2020", // Или "es2022" для новых фич
+    "module": "NodeNext", // Используем ES-модули
+    "moduleResolution": "nodenext", // Разрешение модулей как в Node.js
+    "outDir": "./dist", // Папка для компилированного кода
+    "rootDir": "./src", // Папка с исходниками
+    "strict": false, // Включает строгую типизацию
+    "esModuleInterop": true, // Импорт CommonJS модулей
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "sourceMap": true /* Create source map files for emitted JavaScript files. */,
+    "allowJs": true,
+    "lib": ["esnext"],
+    "baseUrl": "./"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"],
+  "ts-node": {
+    "esm": true
+  }
+}
