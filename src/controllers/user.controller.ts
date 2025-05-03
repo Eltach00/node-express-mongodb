@@ -30,7 +30,7 @@ export const registerUserHandler = (req, res) => {
 };
 
 export const loginUserHandler = (req, res) => {
-  User.findOne()
+  User.findOne({ email: req.body.email })
     .then((user) => {
       if (!user) {
         return authFailed(res);
@@ -47,6 +47,8 @@ export const loginUserHandler = (req, res) => {
             );
             res.status(200).json({
               token,
+              userId: user._id,
+              expireIn: 3600,
             });
           } else {
             authFailed(res);

@@ -13,15 +13,16 @@ export const savePostsHandler = (req, res) => {
 };
 
 export const getPostsHandler = (req, res) => {
-  const pagesize = +req.query.pagesize;
-  const currentPage = +req.query.page;
-  const postQuery = Post.find();
+  const pagesize = +req.query.pagesize || 10;
+  const currentPage = +req.query.page || 1;
+  const postQuery = Post.find({ creator: req.userData.userId });
   let fetchedPosts;
   if (pagesize && currentPage) {
     postQuery.skip(pagesize * (currentPage - 1)).limit(pagesize);
   }
   postQuery
     .then((documents) => {
+      console.log(documents);
       fetchedPosts = documents;
       return Post.countDocuments();
     })
@@ -45,16 +46,26 @@ export const putPostsHandler = (req, res) => {
     name: req.body.name,
     imagePath: imagePath,
   });
-  console.log(post);
-  Post.updateOne({ _id: req.params.id }, post).then((data) => {
-    res.status(200).send('post update!');
+  Post.updateOne(
+    { _id: req.params.id, creator: req.userData.userId },
+    post
+  ).then((result) => {
+    if (result.modifiedCount > 0) {
+      res.status(200).json({ message: 'Update successful!' });
+    } else {
+      res.status(401).json({ message: 'Not authorized!' });
+    }
   });
 };
 
 export const deletePostsHandler = (req, res) => {
-  Post.findOneAndDelete(req.params.id)
-    .then(() => {
-      res.status(201).send('post deleted!');
+  Post.findOneAndDelete({ _id: req.params.id, creator: req.userData.userId })
+    .then((result) => {
+      if (result) {
+        return res.status(200).json({ message: 'Post deleted!' });
+      } else {
+        return res.status(401).json({ message: 'Not authorized!' });
+      }
     })
     .catch((err) => console.log(err));
 };
