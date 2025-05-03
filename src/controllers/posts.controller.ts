@@ -1,10 +1,11 @@
 import Post from '../models/post.model.js';
 
-export const postPostsHandler = (req, res) => {
+export const savePostsHandler = (req, res) => {
   const url = req.protocol + '://' + req.get('host');
   const post = new Post({
     name: req.body.name,
-    imagePath: url + '/uploads/' + req.file.filename,
+    imagePath: req.file ? url + '/uploads/' + req.file.filename : null,
+    creator: req.userData.userId,
   });
   post.save().then((doc) => {
     res.status(201).send({ id: doc.id });
@@ -52,8 +53,7 @@ export const putPostsHandler = (req, res) => {
 
 export const deletePostsHandler = (req, res) => {
   Post.findOneAndDelete(req.params.id)
-    .then((dbResponse) => {
-      console.log(dbResponse);
+    .then(() => {
       res.status(201).send('post deleted!');
     })
     .catch((err) => console.log(err));
