@@ -1,8 +1,10 @@
 import Post from '../models/post.model.js';
 
 export const postPostsHandler = (req, res) => {
+  const url = req.protocol + '://' + req.get('host');
   const post = new Post({
     name: req.body.name,
+    imagePath: url + '/uploads/' + req.file.filename,
   });
   post.save().then((doc) => {
     res.status(201).send({ id: doc.id });
@@ -10,19 +12,39 @@ export const postPostsHandler = (req, res) => {
 };
 
 export const getPostsHandler = (req, res) => {
-  Post.find().then((data) => {
-    res.status(200).json({
-      message: 'success',
-      posts: data,
+  const pagesize = +req.query.pagesize;
+  const currentPage = +req.query.page;
+  const postQuery = Post.find();
+  let fetchedPosts;
+  if (pagesize && currentPage) {
+    postQuery.skip(pagesize * (currentPage - 1)).limit(pagesize);
+  }
+  postQuery
+    .then((documents) => {
+      fetchedPosts = documents;
+      return Post.countDocuments();
+    })
+    .then((count) => {
+      res.status(200).json({
+        message: 'Posts fetched successfully!',
+        posts: fetchedPosts,
+        maxPosts: count,
+      });
     });
-  });
 };
 
-export const patchPostsHandler = (req, res) => {
+export const putPostsHandler = (req, res) => {
+  let imagePath = req.body.imagePath;
+  if (req.file) {
+    const url = req.protocol + '://' + req.get('host');
+    imagePath = url + '/uploads/' + req.file.filename;
+  }
   const post = new Post({
     _id: req.params.id,
     name: req.body.name,
+    imagePath: imagePath,
   });
+  console.log(post);
   Post.updateOne({ _id: req.params.id }, post).then((data) => {
     res.status(200).send('post update!');
   });

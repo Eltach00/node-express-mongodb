@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import router from './routing/router.js';
+import bodyParser from 'body-parser';
 
 mongoose
   .connect(
@@ -14,9 +15,9 @@ mongoose
 
 const port = 3000;
 const app = express();
-
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(router);
 
 app.listen(port, () => {

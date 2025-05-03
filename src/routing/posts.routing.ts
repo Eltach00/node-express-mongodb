@@ -3,14 +3,15 @@ import {
   postPostsHandler,
   getPostsHandler,
   deletePostsHandler,
-  patchPostsHandler,
+  putPostsHandler,
 } from '../controllers/posts.controller.js';
+import { uploadSingle } from '../utils/uploads-handler.js';
 
 const router = express.Router();
 
 router.get('/', getPostsHandler);
-router.post('/', postPostsHandler);
+router.post('/', uploadSingle, postPostsHandler);
 router.delete('/:id', deletePostsHandler);
-router.put('/:id', patchPostsHandler);
+router.put('/:id', uploadSingle, putPostsHandler);
 
 export default router;
