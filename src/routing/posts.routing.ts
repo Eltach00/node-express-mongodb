@@ -4,9 +4,8 @@ import {
   getPostsHandler,
   deletePostsHandler,
   putPostsHandler,
-} from '../controllers/posts.controller.js';
-import { uploadSingle } from '../middlewares/uploads-handler.js';
-import { checkAuth } from '../middlewares/check-auth.middleware.js';
+} from '../controllers/index.js';
+import { uploadSingle, checkAuth } from '../middlewares/index.js';
 
 const router = express.Router();
 

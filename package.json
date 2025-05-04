@@ -8,6 +8,7 @@
     "start": "node dist/index.js",
     "lint": "npx eslint ./src --fix"
   },
+  "main": "app.ts",
   "type": "module",
   "license": "ISC",
   "description": "",

@@ -51,7 +51,7 @@ export const loginUserHandler = (req, res) => {
               expireIn: 3600,
             });
           } else {
-            authFailed(res);
+            authFailed(res, 'Invalid authentication credentials!');
           }
         })
         .catch(() => {

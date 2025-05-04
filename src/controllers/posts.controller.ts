@@ -22,7 +22,6 @@ export const getPostsHandler = (req, res) => {
   }
   postQuery
     .then((documents) => {
-      console.log(documents);
       fetchedPosts = documents;
       return Post.countDocuments();
     })
@@ -67,5 +66,5 @@ export const deletePostsHandler = (req, res) => {
         return res.status(401).json({ message: 'Not authorized!' });
       }
     })
-    .catch((err) => console.log(err));
+    .catch((err) => res.status(500).json({ message: 'System error!' }));
 };

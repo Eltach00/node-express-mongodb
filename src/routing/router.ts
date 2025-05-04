@@ -1,7 +1,5 @@
 import express from 'express';
-import postsRouter from './posts.routing.js';
-import rootRouter from './root.routing.js';
-import userRoutes from './user.routing.js';
+import { postsRouter, rootRouter, userRoutes } from './index.js';
 
 const router = express.Router();
 
